@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Documentação da API - School Registration Module</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet">
+        <style>
+        body {
+            background: #f8f9fa;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+        .navbar {
+            background: #343a40 !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .card {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: box-shadow 0.3s ease;
+            background: #ffffff;
+        }
+        .card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        .endpoint-card {
+            margin-bottom: 20px;
+        }
+        .method-badge {
+            font-size: 0.8em;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .method-get { background: #17a2b8; color: white; }
+        .method-post { background: #007bff; color: white; }
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            color: #495057;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            border-radius: 12px;
+            padding: 40px 0;
+            margin: 30px 0;
+            color: #333;
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .tab-content {
+            background: #ffffff;
+            border-radius: 4px;
+            padding: 16px;
+            border: 1px solid #dee2e6;
+        }
+        .nav-tabs .nav-link {
+            border: 1px solid #dee2e6;
+            border-bottom: none;
+            color: #6c757d;
+            font-weight: 500;
+            background: #f8f9fa;
+        }
+        .nav-tabs .nav-link.active {
+            background: #ffffff;
+            color: #495057;
+            border-bottom: 1px solid #ffffff;
+        }
+        .alert {
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+        }
+        .btn-copy {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+        .btn-copy:hover {
+            background: #5a6268;
+        }
+        .code-container {
+            position: relative;
+        }
+        .json-example {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #495057;
+        }
+    </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+                    <img src="assets/logo.svg" alt="School API Logo" width="60" height="60" class="">
+                </a>
+                <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#auth">Autenticação</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#endpoints">Endpoints</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="hero-section text-center fade-in">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="fas fa-graduation-cap me-3"></i>
+                    API de Consulta do Módulo de Registro Escolar
+                </h1>
+                <p class="lead">Documentação completa para desenvolvedores
+                    consultarem a API de registros de estudantes e
+                    documentos</p>
+                <div class="mt-4">
+                    <span class="badge bg-light text-dark me-2">Laravel
+                        12</span>
+                    <span class="badge bg-light text-dark me-2">PHP 8.4</span>
+                </div>
+            </div>
+
+            <section id="auth" class="mb-5 fade-in">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="card-title mb-0">
+                            <i class="fas fa-key me-2"></i>Autenticação
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Para acessar os endpoints protegidos, primeiro
+                            obtenha um token de acesso através do endpoint de
+                            login.</p>
+
+                        <h5>1. Login</h5>
+                        <div class="endpoint-card">
+                            <div class="d-flex align-items-center mb-3">
+                                <span
+                                    class="method-badge method-post me-3">POST</span>
+                                <code class="fs-5">/api/login</code>
+                            </div>
+                            <p class="text-muted">Autentica o usuário e retorna
+                                um token de acesso.</p>
+
+                            <ul class="nav nav-tabs" id="loginTabs"
+                                role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active"
+                                        id="login-request-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#login-request"
+                                        type="button">Request</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link"
+                                        id="login-response-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#login-response"
+                                        type="button">Response</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="loginTabsContent">
+                                <div class="tab-pane fade show active"
+                                    id="login-request" role="tabpanel">
+                                    <div class="code-container">
+                                        <button class="btn-copy"
+                                            onclick="copyToClipboard('loginRequest')">Copiar</button>
+                                        <div class="code-block"
+                                            id="loginRequest">
+                                            POST /api/login
+                                            Content-Type: application/json
+
+                                            {
+                                            "email": "admin@example.com",
+                                            "password": "senha"
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="login-response"
+                                    role="tabpanel">
+                                    <div class="code-container">
+                                        <button class="btn-copy"
+                                            onclick="copyToClipboard('loginResponse')">Copiar</button>
+                                        <div class="json-example"
+                                            id="loginResponse">
+                                            {
+                                            "token": "1|abc123def456..."
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h5 class="mt-4">2. Usando o Token</h5>
+                        <p>Para endpoints autenticados, inclua o token no header
+                            Authorization:</p>
+                        <div class="code-container">
+                            <button class="btn-copy"
+                                onclick="copyToClipboard('authHeader')">Copiar</button>
+                            <div class="code-block" id="authHeader">
+                                Authorization: Bearer 1|abc123def456...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="endpoints" class="mb-5 fade-in">
+                <div class="card">
+                    <div class="card-header bg-warning text-dark">
+                        <h3 class="card-title mb-0">
+                            <i class="fas fa-search me-2"></i>Endpoints de
+                            Consulta da API
+                        </h3>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="endpoint-card">
+                            <div class="d-flex align-items-center mb-3">
+                                <span
+                                    class="method-badge method-get me-3">GET</span>
+                                <code class="fs-5">/api/students</code>
+                            </div>
+                            <p class="text-muted">Lista paginada de
+                                estudantes.</p>
+
+                            <h6>Parâmetros de Query:</h6>
+                            <ul>
+                                <li><code>page</code> (opcional): Número da
+                                    página (padrão: 1)</li>
+                                <li><code>per_page</code> (opcional): Itens por
+                                    página (padrão: 10)</li>
+                            </ul>
+
+                            <ul class="nav nav-tabs" id="studentsTabs"
+                                role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active"
+                                        id="students-request-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#students-request"
+                                        type="button">Request</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link"
+                                        id="students-response-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#students-response"
+                                        type="button">Response</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="studentsTabsContent">
+                                <div class="tab-pane fade show active"
+                                    id="students-request" role="tabpanel">
+                                    <div class="code-container">
+                                        <button class="btn-copy"
+                                            onclick="copyToClipboard('studentsRequest')">Copiar</button>
+                                        <div class="code-block"
+                                            id="studentsRequest">
+                                            GET /api/students?page=1&per_page=10
+                                            Authorization: Bearer YOUR_TOKEN
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade"
+                                    id="students-response" role="tabpanel">
+                                    <div class="code-container">
+                                        <button class="btn-copy"
+                                            onclick="copyToClipboard('studentsResponse')">Copiar</button>
+                                        <div class="json-example"
+                                            id="studentsResponse">
+                                            {
+                                            "results": [
+                                            {
+                                            "name": "Marcos Silva",
+                                            "cpf": "99999999999"
+                                            }
+                                            ],
+                                            "paginate": {
+                                            "currentPage": 1,
+                                            "totalPages": 10,
+                                            "total": 95
+                                            }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="endpoint-card">
+                            <div class="d-flex align-items-center mb-3">
+                                <span
+                                    class="method-badge method-get me-3">GET</span>
+                                <code class="fs-5">/api/students/{cpf}</code>
+                            </div>
+                            <p class="text-muted">Detalhes do estudante com
+                                lista de documentos.</p>
+
+                            <h6>Parâmetros de Path:</h6>
+                            <ul>
+                                <li><code>cpf</code> (obrigatório): CPF do
+                                    estudante</li>
+                            </ul>
+
+                            <ul class="nav nav-tabs" id="studentTabs"
+                                role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active"
+                                        id="student-request-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#student-request"
+                                        type="button">Request</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link"
+                                        id="student-response-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#student-response"
+                                        type="button">Response</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="studentTabsContent">
+                                <div class="tab-pane fade show active"
+                                    id="student-request" role="tabpanel">
+                                    <div class="code-container">
+                                        <button class="btn-copy"
+                                            onclick="copyToClipboard('studentRequest')">Copiar</button>
+                                        <div class="code-block" id="studentRequest">
+                                            GET /api/students/99999999999
+                                            Authorization: Bearer YOUR_TOKEN
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="student-response"
+                                    role="tabpanel">
+                                    <div class="code-container">
+                                        <button class="btn-copy"
+                                            onclick="copyToClipboard('studentResponse')">Copiar</button>
+                                        <div class="json-example"
+                                            id="studentResponse">
+                                            {
+                                            "name": "Marcos Silva",
+                                            "cpf": "99999999999",
+                                            "archives": [
+                                            {
+                                            "id": 1,
+                                            "name": "CPF",
+                                            "link":
+                                            "Y29udGV1ZG9jb2RpZmljYWRvZW1iYXNlNjQ=",
+                                            "date": "2023-10-30 12:00:00"
+                                            }
+                                            ]
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="endpoint-card">
+                            <div class="d-flex align-items-center mb-3">
+                                <span
+                                    class="method-badge method-get me-3">GET</span>
+                                <code
+                                    class="fs-5">/api/students/{cpf}/documents/{id}</code>
+                            </div>
+                            <p class="text-muted">Informações detalhadas do
+                                documento.</p>
+
+                            <h6>Parâmetros de Path:</h6>
+                            <ul>
+                                <li><code>cpf</code> (obrigatório): CPF do
+                                    estudante</li>
+                                <li><code>id</code> (obrigatório): ID do
+                                    documento</li>
+                            </ul>
+
+                            <ul class="nav nav-tabs" id="documentTabs"
+                                role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active"
+                                        id="document-request-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#document-request"
+                                        type="button">Request</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link"
+                                        id="document-response-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#document-response"
+                                        type="button">Response</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="documentTabsContent">
+                                <div class="tab-pane fade show active"
+                                    id="document-request" role="tabpanel">
+                                    <div class="code-container">
+                                        <button class="btn-copy"
+                                            onclick="copyToClipboard('documentRequest')">Copiar</button>
+                                        <div class="code-block"
+                                            id="documentRequest">
+                                            GET
+                                            /api/students/99999999999/documents/1
+                                            Authorization: Bearer YOUR_TOKEN
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade"
+                                    id="document-response" role="tabpanel">
+                                    <div class="code-container">
+                                        <button class="btn-copy"
+                                            onclick="copyToClipboard('documentResponse')">Copiar</button>
+                                        <div class="json-example"
+                                            id="documentResponse">
+                                            {
+                                            "name": "Documento.pdf",
+                                            "folder": "Aluno X",
+                                            "category": "Categoria",
+                                            "type": "Tipo",
+                                            "date": "31-10-2025 14:00:00"
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="endpoint-card">
+                            <div class="d-flex align-items-center mb-3">
+                                <span
+                                    class="method-badge method-get me-3">GET</span>
+                                <code
+                                    class="fs-5">/api/students/{cpf}/documents/{id}/viewDocument</code>
+                            </div>
+                            <p class="text-muted">Visualiza o conteúdo do
+                                documento (stream inline).</p>
+
+                            <h6>Parâmetros de Path:</h6>
+                            <ul>
+                                <li><code>cpf</code> (obrigatório): CPF do
+                                    estudante</li>
+                                <li><code>id</code> (obrigatório): ID do
+                                    documento</li>
+                            </ul>
+
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Este endpoint retorna o conteúdo binário do
+                                arquivo, não JSON.
+                            </div>
+
+                            <ul class="nav nav-tabs" id="viewDocumentTabs"
+                                role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active"
+                                        id="viewDocument-request-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#viewDocument-request"
+                                        type="button">Request</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="viewDocumentTabsContent">
+                                <div class="tab-pane fade show active"
+                                    id="viewDocument-request" role="tabpanel">
+                                    <div class="code-container">
+                                        <button class="btn-copy"
+                                            onclick="copyToClipboard('viewDocumentRequest')">Copiar</button>
+                                        <div class="code-block" id="viewDocumentRequest">
+                                            GET
+                                            /api/students/99999999999/documents/1/viewDocument
+                                            Authorization: Bearer YOUR_TOKEN
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="mt-3"><strong>Headers de
+                                    resposta:</strong></p>
+                            <ul>
+                                <li><code>Content-Type</code>: Tipo MIME do
+                                    arquivo (ex: application/pdf)</li>
+                                <li><code>Content-Disposition</code>: inline;
+                                    filename=nome_do_arquivo</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <footer class="text-center text-white mt-5 mb-4">
+                <p>&copy; 2025 School Registration Module API. Documentação
+                    gerada automaticamente.</p>
+                <div class="mt-3">
+                    <a href="#" class="text-white me-3"><i
+                            class="fab fa-github fa-2x"></i></a>
+                    <a href="#" class="text-white me-3"><i
+                            class="fas fa-envelope fa-2x"></i></a>
+                    <a href="#" class="text-white"><i
+                            class="fas fa-globe fa-2x"></i></a>
+                </div>
+            </footer>
+        </div>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent || element.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copiado!';
+                btn.style.background = '#28a745';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#6c757d';
+                }, 2000);
+            });
+        }
+
+        // Smooth scrolling for navbar links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add fade-in animation to cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.endpoint-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+    </body>
+</html>
